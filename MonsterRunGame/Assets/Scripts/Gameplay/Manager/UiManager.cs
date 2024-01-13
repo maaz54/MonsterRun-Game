@@ -5,6 +5,8 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Gameplay.UI;
+using System.Threading.Tasks;
 
 namespace Gameplay.Manager.UI
 {
@@ -15,6 +17,7 @@ namespace Gameplay.Manager.UI
         [SerializeField] GameObject ResultPanel;
         [SerializeField] Button gameStartButton;
         [SerializeField] TextMeshProUGUI roundNumberText;
+        [SerializeField] GameStartCounter gameStartCounter;
 
         public Action OnGameStartButton;
 
@@ -23,18 +26,20 @@ namespace Gameplay.Manager.UI
             gameStartButton.onClick.AddListener(GameStartButton);
         }
 
-        private void GameStartButton()
-        {
-            OnGameStartButton?.Invoke();
-        }
-
-        public void StartGame(int roundNumber)
+        public async Task StartGame(int roundNumber)
         {
             GameplayPanel.SetActive(true);
             menuPanel.SetActive(false);
             ResultPanel.SetActive(false);
             roundNumberText.text = "Round: " + roundNumber.ToString();
+            await gameStartCounter.StartCounter(3);
         }
+
+        private void GameStartButton()
+        {
+            OnGameStartButton?.Invoke();
+        }
+
 
     }
 }

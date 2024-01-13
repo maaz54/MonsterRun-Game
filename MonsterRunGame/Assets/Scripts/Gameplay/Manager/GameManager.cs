@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Gameplay.Manager.UI;
 using ObjectPool;
 using UnityEngine;
@@ -14,20 +15,26 @@ namespace Gameplay.Manager
 
         void Start()
         {
-            uiManager.OnGameStartButton += OnGameStart;
+            uiManager.OnGameStartButton += OnGameStartButton;
+            roundManager.OnRoundFinished += OnRoundEnd;
         }
 
-        public void OnGameStart()
+        private void OnGameStartButton()
         {
-            roundManager.StartRound();
-            uiManager.StartGame(roundManager.RoundNo);
+            _ = OnGameStart();
         }
 
-        // private void OnGameComplete(List<il>)
-        // {
+        private async Task OnGameStart()
+        {
+            roundManager.InitializeRound();
+            await uiManager.StartGame(roundManager.RoundNo);
+            roundManager.StartRound();
+        }
 
-        // }
-
+        private void OnRoundEnd(List<IMonster> monsters)
+        {
+            roundManager.DespawnRound();
+        }
 
 
     }

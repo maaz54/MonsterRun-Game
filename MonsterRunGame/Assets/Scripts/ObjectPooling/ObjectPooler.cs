@@ -40,7 +40,7 @@ namespace ObjectPool
             if (_object is IPoolableObject poolObject)
             {
                 poolObject.Transform.gameObject.SetActive(false);
-                poolObject.Transform.gameObject.transform.parent = transform;
+                poolObject.Transform.gameObject.transform.SetParent(transform);
                 poolableObjects.Add(poolObject);
             }
         }
