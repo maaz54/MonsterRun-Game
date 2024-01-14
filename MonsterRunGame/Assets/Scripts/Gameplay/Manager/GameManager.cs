@@ -6,6 +6,7 @@ using Gameplay.Manager.UI;
 using ObjectPool;
 using UnityEngine;
 using TMPro;
+using Gameplay.Monsters;
 
 namespace Gameplay.Manager
 {
@@ -14,6 +15,7 @@ namespace Gameplay.Manager
         [SerializeField] ObjectPooler objectPooler;
         [SerializeField] UiManager uiManager;
         [SerializeField] RoundManager roundManager;
+        [SerializeField] CameraOffset cameraOffset;
 
         void Start()
         {
@@ -34,7 +36,9 @@ namespace Gameplay.Manager
 
         private async Task OnGameStart()
         {
-            roundManager.InitializeRound();
+            roundManager.InitializeRound( (totalMonsters) => cameraOffset.SetCameraOffset(totalMonsters));
+
+
             await uiManager.StartGame(roundManager.RoundNo);
             roundManager.StartRound();
         }

@@ -6,14 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Gameplay.Monsters;
 using ObjectPool;
-using Unity.VisualScripting;
 using UnityEngine;
+using Extensions;
 
 namespace Gameplay.Manager
 {
     public class RoundManager : MonoBehaviour
     {
-        private int roundno = 6;
+        [SerializeField] private int roundno = 50;
         public int RoundNo => roundno;
         [SerializeField] Monster prefabMonster;
         [SerializeField] ObjectPooler objectPooler;
@@ -26,9 +26,14 @@ namespace Gameplay.Manager
 
         private Action MonsterCanMove;
 
-        public void InitializeRound()
+        public void InitializeRound(Action<int> SetCamera)
         {
-            SpawnMonster(GetNextFibonacci(RoundNo));
+            // int totalMonsters = GetNextFibonacci(RoundNo);
+            int totalMonsters = roundno.FibonacciMethod();
+            Debug.Log(totalMonsters);
+
+            SetCamera?.Invoke(totalMonsters);
+            SpawnMonster(totalMonsters);
         }
 
         public void RoundComplete()
@@ -105,14 +110,6 @@ namespace Gameplay.Manager
             {
                 OnRoundFinished?.Invoke(monstersRank);
             }
-        }
-
-
-        int GetNextFibonacci(int current)
-        {
-            // Function to calculate the next number in the Fibonacci sequence
-            // Implement the logic based on your needs
-            return current + 1;
         }
 
     }
