@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gameplay.Manager.UI;
 using ObjectPool;
 using UnityEngine;
+using TMPro;
 
 namespace Gameplay.Manager
 {
@@ -16,10 +18,16 @@ namespace Gameplay.Manager
         void Start()
         {
             uiManager.OnGameStartButton += OnGameStartButton;
-            roundManager.OnRoundFinished += OnRoundEnd;
+            uiManager.OnStartNextRoundButton += OnStartNextRoundButton;
+            roundManager.OnRoundFinished += AllMonsterReached;
         }
 
         private void OnGameStartButton()
+        {
+            _ = OnGameStart();
+        }
+
+        private void OnStartNextRoundButton()
         {
             _ = OnGameStart();
         }
@@ -31,11 +39,21 @@ namespace Gameplay.Manager
             roundManager.StartRound();
         }
 
-        private void OnRoundEnd(List<IMonster> monsters)
+        private void AllMonsterReached(List<IMonster> monsters)
         {
-            roundManager.DespawnRound();
+            _ = RoundEnd(monsters);
         }
 
+        private async Task RoundEnd(List<IMonster> monsters)
+        {
+            await Task.Delay(1);
+            uiManager.StopTimer(out float timeElapsed);
+            uiManager.ShowResult(monsters.Select(monster => monster.MonsterName).ToArray(), timeElapsed.ToString());
 
+            await Task.Delay(1);
+            roundManager.RoundComplete();
+            roundManager.DespawnRound();
+
+        }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 
 public interface IMonster : IPoolableObject
 {
-    void StartRound();
+    string MonsterName { get; set; }
+    void Initialize(ref Action CanMove, string MonsterName);
     Action<IMonster> OnFinished { get; set; }
 }

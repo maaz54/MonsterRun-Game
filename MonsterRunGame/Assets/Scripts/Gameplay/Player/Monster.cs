@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using ObjectPool.Interface;
 using System;
+using TMPro;
 
 namespace Gameplay.Monsters
 {
     public class Monster : MonoBehaviour, IMonster
     {
+        [SerializeField] private TextMeshPro nameText;
         [SerializeField] private SpriteRenderer spriteRenderer;
         private float velocity;
         private float timeToChangeVelocity;
@@ -15,12 +17,20 @@ namespace Gameplay.Monsters
         public int ObjectID => "Monster".GetHashCode();
         public Transform Transform => transform;
         public Action<IMonster> OnFinished { get; set; }
-        Camera camera;
+        public string MonsterName { get; set; }
+
         private bool canMove;
 
-        public void StartRound()
+        public void Initialize(ref Action CanMove, string MonsterName)
         {
-            camera = Camera.main;
+            canMove = false;
+            this.MonsterName = MonsterName;
+            nameText.text = MonsterName;
+            CanMove += StartRound;
+        }
+
+        private void StartRound()
+        {
             ChangeVelocity();
             canMove = true;
         }
@@ -46,7 +56,7 @@ namespace Gameplay.Monsters
         private void ChangeVelocity()
         {
             timeToChangeVelocity = UnityEngine.Random.Range(.1f, .8f);
-            velocity = UnityEngine.Random.Range(3f, 6f);
+            velocity = UnityEngine.Random.Range(.5f, 2f);
         }
 
         void ObjectLeftScreen()
