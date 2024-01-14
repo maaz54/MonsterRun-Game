@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Gameplay.UI;
@@ -18,6 +17,7 @@ namespace Gameplay.Manager.UI
         [SerializeField] Button gameStartButton;
         [SerializeField] Button startNextRoundButton;
         [SerializeField] TextMeshProUGUI roundNumberText;
+        [SerializeField] TextMeshProUGUI TotalMonstersText;
         [SerializeField] GameStartCounter gameStartCounter;
         [SerializeField] UiTimer uiTimer;
         public Action OnGameStartButton;
@@ -33,12 +33,13 @@ namespace Gameplay.Manager.UI
             ResultPanel.gameObject.SetActive(false);
         }
 
-        public async Task StartGame(int roundNumber)
+        public async Task StartGame(int roundNumber, int totalMonsters)
         {
             GameplayPanel.SetActive(true);
             menuPanel.SetActive(false);
             ResultPanel.gameObject.SetActive(false);
             roundNumberText.text = "Round: " + roundNumber.ToString();
+            TotalMonstersText.text = "Total Monsters\n" + totalMonsters;
             await gameStartCounter.StartCounter(3);
             _ = uiTimer.StartTimer();
         }

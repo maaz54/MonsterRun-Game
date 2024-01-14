@@ -7,7 +7,7 @@ namespace Extensions
 {
     public static class Extension
     {
-        public static int FibonacciMethod(this int sequenceNumber)
+        public static int GetFibonacciSequence(this int sequenceNumber)
         {
             if (sequenceNumber <= 0)
             {

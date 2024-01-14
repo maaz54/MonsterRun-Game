@@ -4,6 +4,7 @@ using UnityEngine;
 using ObjectPool.Interface;
 using System;
 using TMPro;
+using System.Threading.Tasks;
 
 namespace Gameplay.Monsters
 {
@@ -61,8 +62,17 @@ namespace Gameplay.Monsters
 
         void ObjectLeftScreen()
         {
-            canMove = false;
+            _ = Destory(1);
             OnFinished?.Invoke(this);
+        }
+
+        private async Task Destory(float Delay)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(Delay));
+
+            // we can add more visuals for destroy monster
+            canMove = false;
+            gameObject.SetActive(false);
         }
 
     }

@@ -13,7 +13,7 @@ namespace Gameplay.Manager
 {
     public class RoundManager : MonoBehaviour
     {
-        [SerializeField] private int roundno = 50;
+        [SerializeField] private int roundno = 1;
         public int RoundNo => roundno;
         [SerializeField] Monster prefabMonster;
         [SerializeField] ObjectPooler objectPooler;
@@ -26,12 +26,9 @@ namespace Gameplay.Manager
 
         private Action MonsterCanMove;
 
-        public void InitializeRound(Action<int> SetCamera)
+        public void InitializeRound(out int totalMonsters,Action<int> SetCamera)
         {
-            // int totalMonsters = GetNextFibonacci(RoundNo);
-            int totalMonsters = roundno.FibonacciMethod();
-            Debug.Log(totalMonsters);
-
+            totalMonsters = roundno.GetFibonacciSequence();
             SetCamera?.Invoke(totalMonsters);
             SpawnMonster(totalMonsters);
         }

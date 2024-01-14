@@ -15,7 +15,7 @@ namespace Gameplay.Manager
         [SerializeField] ObjectPooler objectPooler;
         [SerializeField] UiManager uiManager;
         [SerializeField] RoundManager roundManager;
-        [SerializeField] CameraOffset cameraOffset;
+        [SerializeField] EnviromentAdjustment cameraOffset;
 
         void Start()
         {
@@ -36,10 +36,8 @@ namespace Gameplay.Manager
 
         private async Task OnGameStart()
         {
-            roundManager.InitializeRound( (totalMonsters) => cameraOffset.SetCameraOffset(totalMonsters));
-
-
-            await uiManager.StartGame(roundManager.RoundNo);
+            roundManager.InitializeRound(out int totalMonsters, (totalMonsters) => cameraOffset.SetEnviroment(totalMonsters));
+            await uiManager.StartGame(roundManager.RoundNo, totalMonsters);
             roundManager.StartRound();
         }
 
