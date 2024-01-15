@@ -18,15 +18,15 @@ namespace Gameplay.Manager
         IPlayersHandler playersHandler;
         [SerializeField] private int roundno = 1;
         public int RoundNo => roundno;
-        public int TotalMonsters => monsters.Count;
+        public int TotalMonsters { get; private set; }
         public Action OnRoundInitialized { get; set; }
         IMonster prefabMonster;
         IObjectPooler objectPooler;
         List<IMonster> monsters = new();
-        List<IMonster> monstersRank = new();
+        string[] monstersRank;
+        int moveRankingIndex;
         IEnviroment enviroment;
-
-        public Action<List<IMonster>> OnRoundFinished { get; set; }
+        public Action<string[]> OnRoundFinished { get; set; }
         private Action MonsterCanMove;
 
         [Inject]
@@ -40,7 +40,10 @@ namespace Gameplay.Manager
 
         public async Task InitializeRound()
         {
+            moveRankingIndex = 0;
             int totalMonsters = roundno.GetFibonacciSequence();
+            TotalMonsters = totalMonsters;
+            monstersRank = new string[totalMonsters];
             enviroment.SetEnviroment(totalMonsters);
             await SpawnMonster(totalMonsters);
         }
@@ -60,19 +63,8 @@ namespace Gameplay.Manager
         public void DespawnRound()
         {
             playersHandler.IsGameStarted = false;
-            monstersRank.Clear();
-            DespanwnMonster();
+            // monstersRank = new string[];
             MonsterCanMove = null;
-
-            void DespanwnMonster()
-            {
-                if (monsters.Count > 0)
-                {
-                    objectPooler.Remove(monsters.First());
-                    monsters.Remove(monsters.First());
-                    DespanwnMonster();
-                }
-            }
         }
 
         public void StartRound()
@@ -104,15 +96,15 @@ namespace Gameplay.Manager
             spawnPosition.x += 1;
             spawnPosition.y = yStartPos;
 
-            // Alternate the Y position
-            if (monsters.Count % 2 == 0)
-            {
-                spawnPosition.y += monsters.Count;
-            }
-            else
-            {
-                spawnPosition.y -= monsters.Count;
-            }
+            // // Alternate the Y position
+            // if (monsters.Count % 2 == 0)
+            // {
+            //     spawnPosition.y += monsters.Count;
+            // }
+            // else
+            // {
+            //     spawnPosition.y -= monsters.Count;
+            // }
 
             return spawnPosition;
 
@@ -121,9 +113,11 @@ namespace Gameplay.Manager
         private void OnMonsterFinishGame(IMonster monster)
         {
             monster.OnFinished -= OnMonsterFinishGame;
-            monstersRank.Add(monster);
-
-            if (monstersRank.Count == monsters.Count)
+            monstersRank[moveRankingIndex] = monster.MonsterName;
+            monsters.Remove(monster);
+            objectPooler.Remove(monster);
+            moveRankingIndex++;
+            if (monsters.Count <= 0)
             {
                 OnRoundFinished?.Invoke(monstersRank);
             }

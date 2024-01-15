@@ -11,7 +11,7 @@ namespace Gameplay.Interface
         int RoundNo { get; }
         int TotalMonsters { get; }
         Action OnRoundInitialized { get; set; }
-        Action<List<IMonster>> OnRoundFinished { get; set; }
+        Action<string[]> OnRoundFinished { get; set; }
         Task InitializeRound();
         void RoundComplete();
         void DespawnRound();

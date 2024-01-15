@@ -58,19 +58,18 @@ namespace Gameplay.Manager
             roundManager.StartRound();
         }
 
-        private void AllMonsterReached(List<IMonster> monsters)
+        private void AllMonsterReached(string[] monsters)
         {
             _ = RoundEnd(monsters);
         }
 
-        private async Task RoundEnd(List<IMonster> monsters)
+        private async Task RoundEnd(string[] monsters)
         {
             await Task.Delay(1);
             uiManager.StopTimer(out float timeElapsed);
-            await uiManager.ShowResult(monsters.Select(monster => monster.MonsterName).ToArray(), timeElapsed);
+            await uiManager.ShowResult(monsters, timeElapsed);
             roundManager.RoundComplete();
             roundManager.DespawnRound();
-
         }
     }
 }
