@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Extensions
 {
     public static class Extension
     {
+        /// <summary>
+        /// Calculates the nth number in the Fibonacci sequence.
+        /// </summary>
         public static int GetFibonacciSequence(this int sequenceNumber)
         {
             if (sequenceNumber <= 0)
@@ -33,7 +33,7 @@ namespace Extensions
         }
 
         /// <summary>
-        /// Formats the time in minutes and seconds for display
+        /// Formats the given time in minutes and seconds for display.
         /// </summary>
         public static string DisplayTime(this float timeToDisplay)
         {
@@ -41,8 +41,6 @@ namespace Extensions
             float seconds = Mathf.FloorToInt(timeToDisplay % 60);
             return string.Format("{0:00}:{1:00}", minutes, seconds);
         }
-
-
     }
 
 }

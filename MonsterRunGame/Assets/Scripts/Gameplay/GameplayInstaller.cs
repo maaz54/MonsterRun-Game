@@ -11,6 +11,9 @@ using Zenject;
 
 namespace Gameplay.Installer
 {
+    /// <summary>
+    /// Installer class for setting up Zenject bindings for gameplay-related dependencies.
+    /// </summary>
     public class GameplayInstaller : MonoInstaller<GameplayInstaller>
     {
         [SerializeField] EnviromentAdjustment enviromentAdjustment;
@@ -20,6 +23,9 @@ namespace Gameplay.Installer
         [SerializeField] Monster monsterPrefab;
         [SerializeField] PlayersHandler playersHandler;
 
+        /// <summary>
+        /// Configures Zenject bindings for gameplay-related dependencies.
+        /// </summary>
         public override void InstallBindings()
         {
             Container.Bind<IEnviroment>().FromInstance(enviromentAdjustment).AsSingle();

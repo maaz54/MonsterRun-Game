@@ -13,23 +13,53 @@ using Zenject;
 
 namespace Gameplay.Manager
 {
+    /// <summary>
+    /// Manages the rounds in the game, including monster spawning, round initialization, and completion.
+    /// </summary>
     public class RoundManager : MonoBehaviour, IRoundManager
     {
-        IPlayersHandler playersHandler;
-        [SerializeField] private int roundno = 1;
+
+        /// <summary>
+        /// Property to get the current round number
+        /// </summary>
         public int RoundNo => roundno;
+
+        /// <summary>
+        /// Property to get the total number of monsters in the round.
+        /// </summary>
         public int TotalMonsters { get; private set; }
+
+        /// <summary>
+        /// Event invoked when the round is initialized.
+        /// </summary>
         public Action OnRoundInitialized { get; set; }
-        IMonster prefabMonster;
-        IObjectPooler objectPooler;
-        List<IMonster> monsters = new();
-        string[] monstersRank;
-        int moveRankingIndex;
+
+        /// <summary>
+        /// Event invoked when the round is completed.
+        /// </summary>
         public Action<string[]> OnRoundFinished { get; set; }
+
+        private IPlayersHandler playersHandler;
+
+        private int roundno = 1;
+
+        string[] monstersRank;
+
+        private int moveRankingIndex;
+
         private Action MonsterCanMove;
-        Vector3 spawnPosition;
 
+        private Vector3 spawnPosition;
 
+        private IMonster prefabMonster;
+
+        private IObjectPooler objectPooler;
+
+        private List<IMonster> monsters = new();
+
+        /// <summary>
+        /// Constructor for dependency injection
+        /// </summary>
         [Inject]
         private void Constructor(IObjectPooler objectPooler, IMonster prefabMonster, IPlayersHandler playersHandler)
         {
@@ -38,6 +68,9 @@ namespace Gameplay.Manager
             this.playersHandler = playersHandler;
         }
 
+        /// <summary>
+        /// Initializes the round by determining the number of monsters to spawn and spawning them.
+        /// </summary>
         public async Task InitializeRound()
         {
             spawnPosition = MonsterPositon();
@@ -48,30 +81,45 @@ namespace Gameplay.Manager
             await SpawnMonster(totalMonsters);
         }
 
+        /// <summary>
+        /// Invoked when all monsters have been spawned, assigns monsters to the players handler, and triggers the round initialized event.
+        /// </summary>
         private void AllMonstersSpawned()
         {
             playersHandler.AssignMonsters(monsters.ToArray());
             OnRoundInitialized?.Invoke();
         }
 
-
+        /// <summary>
+        /// Completes the current round.
+        /// Increments the round number
+        /// </summary>
         public void RoundComplete()
         {
             roundno++;
         }
 
+        /// <summary>
+        /// Despawns the current round by stopping monster movement and resetting related variables.
+        /// </summary>
         public void DespawnRound()
         {
             playersHandler.IsGameStarted = false;
             MonsterCanMove = null;
         }
 
+        /// <summary>
+        /// Starts the current round by allowing monsters to move.
+        /// </summary>
         public void StartRound()
         {
             playersHandler.IsGameStarted = true;
             MonsterCanMove?.Invoke();
         }
 
+        /// <summary>
+        /// Spawns monsters based on the specified count.
+        /// </summary>
         private async Task SpawnMonster(int count)
         {
             if (count <= 0 || !Application.isPlaying)
@@ -89,6 +137,9 @@ namespace Gameplay.Manager
             _ = SpawnMonster(count - 1);
         }
 
+        /// <summary>
+        /// Calculates the position where monsters should be spawned.
+        /// </summary>
         private Vector2 MonsterPositon()
         {
             Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 10));
@@ -97,6 +148,9 @@ namespace Gameplay.Manager
             return spawnPosition;
         }
 
+        /// <summary>
+        /// Invoked when a monster Left the screen, updates rankings, and triggers the round finished event if all monsters have finished.
+        /// </summary>
         private void OnMonsterFinishGame(IMonster monster)
         {
             monster.OnFinished -= OnMonsterFinishGame;
@@ -109,6 +163,5 @@ namespace Gameplay.Manager
                 OnRoundFinished?.Invoke(monstersRank);
             }
         }
-
     }
 }

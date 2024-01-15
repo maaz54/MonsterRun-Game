@@ -6,9 +6,20 @@ using UnityEngine;
 
 namespace Gameplay.Manager
 {
+
+    /// <summary>
+    /// Adjusts the environment elements based on the camera's orthographic size and aspect ratio.
+    /// </summary>
     public class EnviromentAdjustment : MonoBehaviour, IEnviroment
     {
+        /// <summary>
+        /// Reference to the main camera in the scene.
+        /// </summary>
         [SerializeField] Camera mainCamera;
+
+        /// <summary>
+        /// Reference to the background object.
+        /// </summary>
         [SerializeField] GameObject backGround;
 
         private void Start()
@@ -17,6 +28,9 @@ namespace Gameplay.Manager
             SetEnviroment();
         }
 
+        /// <summary>
+        /// Sets the environment by adjusting the size of the background quad based on the camera's orthographic size and aspect ratio.
+        /// </summary>
         public void SetEnviroment()
         {
             // Get the orthographic size of the camera
