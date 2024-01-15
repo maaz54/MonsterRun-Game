@@ -37,12 +37,9 @@ namespace ObjectPool
         // Remove an object from the pool
         public void Remove<T>(T _object) where T : IPoolableObject
         {
-            if (_object is IPoolableObject poolObject)
-            {
-                poolObject.Transform.gameObject.SetActive(false);
-                poolObject.Transform.gameObject.transform.SetParent(transform);
-                poolableObjects.Add(poolObject);
-            }
+            _object.Transform.gameObject.SetActive(false);
+            _object.Transform.gameObject.transform.SetParent(transform);
+            poolableObjects.Add(_object);
         }
     }
 }

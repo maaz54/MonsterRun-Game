@@ -104,6 +104,7 @@ namespace Gameplay.Manager
         /// </summary>
         public void DespawnRound()
         {
+            monsters.Clear();
             playersHandler.IsGameStarted = false;
             MonsterCanMove = null;
         }
@@ -155,10 +156,9 @@ namespace Gameplay.Manager
         {
             monster.OnFinished -= OnMonsterFinishGame;
             monstersRank[moveRankingIndex] = monster.MonsterName;
-            monsters.Remove(monster);
             objectPooler.Remove(monster);
             moveRankingIndex++;
-            if (monsters.Count <= 0)
+            if (moveRankingIndex >= TotalMonsters)
             {
                 OnRoundFinished?.Invoke(monstersRank);
             }
