@@ -7,6 +7,7 @@ using ObjectPool;
 using Gameplay.Interface;
 using UnityEngine;
 using Zenject;
+using System;
 
 namespace Gameplay.Manager
 {
@@ -16,7 +17,7 @@ namespace Gameplay.Manager
         IRoundManager roundManager;
 
         [Inject]
-        private void Constructor(IUIManager uiManager, IRoundManager roundManager, IEnviroment enviroment)
+        private void Constructor(IUIManager uiManager, IRoundManager roundManager)
         {
             this.uiManager = uiManager;
             this.roundManager = roundManager;
@@ -65,7 +66,7 @@ namespace Gameplay.Manager
 
         private async Task RoundEnd(string[] monsters)
         {
-            await Task.Delay(1);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             uiManager.StopTimer(out float timeElapsed);
             await uiManager.ShowResult(monsters, timeElapsed);
             roundManager.RoundComplete();

@@ -14,12 +14,11 @@ namespace Gameplay.Manager
         private void Start()
         {
             mainCamera = Camera.main;
+            SetEnviroment();
         }
 
-        public void SetEnviroment(int totalNoOfPlayers)
+        public void SetEnviroment()
         {
-            mainCamera.orthographicSize = (totalNoOfPlayers / 2) + 2;
-
             // Get the orthographic size of the camera
             float orthoSize = mainCamera.orthographicSize;
 

@@ -25,26 +25,26 @@ namespace Gameplay.Manager
         List<IMonster> monsters = new();
         string[] monstersRank;
         int moveRankingIndex;
-        IEnviroment enviroment;
         public Action<string[]> OnRoundFinished { get; set; }
         private Action MonsterCanMove;
+        Vector3 spawnPosition;
+
 
         [Inject]
-        private void Constructor(IObjectPooler objectPooler, IMonster prefabMonster, IEnviroment enviroment, IPlayersHandler playersHandler)
+        private void Constructor(IObjectPooler objectPooler, IMonster prefabMonster, IPlayersHandler playersHandler)
         {
             this.objectPooler = objectPooler;
             this.prefabMonster = prefabMonster;
-            this.enviroment = enviroment;
             this.playersHandler = playersHandler;
         }
 
         public async Task InitializeRound()
         {
+            spawnPosition = MonsterPositon();
             moveRankingIndex = 0;
             int totalMonsters = roundno.GetFibonacciSequence();
             TotalMonsters = totalMonsters;
             monstersRank = new string[totalMonsters];
-            enviroment.SetEnviroment(totalMonsters);
             await SpawnMonster(totalMonsters);
         }
 
@@ -63,7 +63,6 @@ namespace Gameplay.Manager
         public void DespawnRound()
         {
             playersHandler.IsGameStarted = false;
-            // monstersRank = new string[];
             MonsterCanMove = null;
         }
 
@@ -82,7 +81,7 @@ namespace Gameplay.Manager
             }
 
             IMonster monster = objectPooler.Pool<Monster>(prefabMonster, transform);
-            monster.Transform.position = MonsterPositon(monsters.Count > 0 ? monsters[monsters.Count - 1].Transform.position.y : 0);
+            monster.Transform.position = spawnPosition;
             monsters.Add(monster);
             monster.OnFinished += OnMonsterFinishGame;
             monster.Initialize(ref MonsterCanMove, "Monster" + monsters.Count);
@@ -90,24 +89,12 @@ namespace Gameplay.Manager
             _ = SpawnMonster(count - 1);
         }
 
-        private Vector2 MonsterPositon(float yStartPos)
+        private Vector2 MonsterPositon()
         {
-            Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(0, UnityEngine.Random.Range(0, Screen.height), 10));
+            Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 10));
             spawnPosition.x += 1;
-            spawnPosition.y = yStartPos;
-
-            // // Alternate the Y position
-            // if (monsters.Count % 2 == 0)
-            // {
-            //     spawnPosition.y += monsters.Count;
-            // }
-            // else
-            // {
-            //     spawnPosition.y -= monsters.Count;
-            // }
-
+            spawnPosition.y = 0;
             return spawnPosition;
-
         }
 
         private void OnMonsterFinishGame(IMonster monster)

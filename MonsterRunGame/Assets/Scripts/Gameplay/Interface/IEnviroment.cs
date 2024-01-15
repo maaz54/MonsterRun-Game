@@ -6,6 +6,6 @@ namespace Gameplay.Interface
 {
     public interface IEnviroment
     {
-        void SetEnviroment(int totalNoOfPlayers);
+        void SetEnviroment();
     }
 }
