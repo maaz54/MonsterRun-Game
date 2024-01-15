@@ -169,10 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daad59e87d98e0d46a71b0797cab6692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPooler: {fileID: 1700098829}
-  uiManager: {fileID: 1766459046}
-  roundManager: {fileID: 1624630723}
-  cameraOffset: {fileID: 821295115}
 --- !u!1 &429236237
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,9 +660,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00a681695dad164ab2133ea2d637305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roundno: 1
-  prefabMonster: {fileID: 4218320093733685514, guid: 5ea0ea105fef2d64b9db05e4bd15cdf6, type: 3}
-  objectPooler: {fileID: 1700098829}
 --- !u!1 &1700098827
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,6 +715,88 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e78469756f53bd24e93f0c2f7e63dc3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1909321522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1909321524}
+  - component: {fileID: 1909321523}
+  - component: {fileID: 1909321525}
+  m_Layer: 0
+  m_Name: SceneContext
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1909321523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909321522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 1909321525}
+  _installerPrefabs: []
+  _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  _parentNewObjectsUnderSceneContext: 0
+  _contractNames: []
+  _parentContractNames: []
+--- !u!4 &1909321524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909321522}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1909321525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909321522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7d79464042d6b4c8e662578c0c1f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enviromentAdjustment: {fileID: 821295115}
+  roundManager: {fileID: 1624630723}
+  uiManager: {fileID: 1766459046}
+  objectPooler: {fileID: 1700098829}
+  monsterPrefab: {fileID: 4218320093733685514, guid: 5ea0ea105fef2d64b9db05e4bd15cdf6, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -730,3 +805,4 @@ SceneRoots:
   - {fileID: 1562191990}
   - {fileID: 421904290}
   - {fileID: 821295114}
+  - {fileID: 1909321524}

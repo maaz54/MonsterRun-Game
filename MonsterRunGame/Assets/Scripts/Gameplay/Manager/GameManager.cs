@@ -4,18 +4,25 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gameplay.Manager.UI;
 using ObjectPool;
+using Gameplay.Interface;
 using UnityEngine;
-using TMPro;
-using Gameplay.Monsters;
+using Zenject;
 
 namespace Gameplay.Manager
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] ObjectPooler objectPooler;
-        [SerializeField] UiManager uiManager;
-        [SerializeField] RoundManager roundManager;
-        [SerializeField] EnviromentAdjustment cameraOffset;
+        IUIManager uiManager;
+        IRoundManager roundManager;
+        IEnviroment enviroment;
+
+        [Inject]
+        private void Constructor(IUIManager uiManager, IRoundManager roundManager, IEnviroment enviroment)
+        {
+            this.uiManager = uiManager;
+            this.roundManager = roundManager;
+            this.enviroment = enviroment;
+        }
 
         void Start()
         {
@@ -36,7 +43,7 @@ namespace Gameplay.Manager
 
         private async Task OnGameStart()
         {
-            roundManager.InitializeRound(out int totalMonsters, (totalMonsters) => cameraOffset.SetEnviroment(totalMonsters));
+            roundManager.InitializeRound(out int totalMonsters, (totalMonsters) => enviroment.SetEnviroment(totalMonsters));
             await uiManager.StartGame(roundManager.RoundNo, totalMonsters);
             roundManager.StartRound();
         }

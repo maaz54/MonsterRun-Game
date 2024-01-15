@@ -1,18 +1,17 @@
+using System;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IUIManager : MonoBehaviour
+namespace Gameplay.Interface
 {
-    // Start is called before the first frame update
-    void Start()
+    public interface IUIManager
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Action OnGameStartButton { get; set; }
+        Action OnStartNextRoundButton { get; set; }
+        Task StartGame(int roundNumber, int totalMonsters);
+        void StopTimer(out float timeElapsed);
+        void ShowResult(string[] PlayersRanking, string totalTime);
     }
 }

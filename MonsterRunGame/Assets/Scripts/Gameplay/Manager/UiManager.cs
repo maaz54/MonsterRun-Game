@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Gameplay.UI;
 using System.Threading.Tasks;
+using Gameplay.Interface;
 
 namespace Gameplay.Manager.UI
 {
-    public class UiManager : MonoBehaviour
+    public class UiManager : MonoBehaviour, IUIManager
     {
         [SerializeField] GameObject menuPanel;
         [SerializeField] GameObject GameplayPanel;
@@ -20,8 +21,8 @@ namespace Gameplay.Manager.UI
         [SerializeField] TextMeshProUGUI TotalMonstersText;
         [SerializeField] GameStartCounter gameStartCounter;
         [SerializeField] UiTimer uiTimer;
-        public Action OnGameStartButton;
-        public Action OnStartNextRoundButton;
+        public Action OnGameStartButton { get; set; }
+        public Action OnStartNextRoundButton { get; set; }
 
         private void Start()
         {

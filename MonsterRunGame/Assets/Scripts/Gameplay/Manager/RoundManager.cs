@@ -4,29 +4,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Gameplay.Interface;
 using Gameplay.Monsters;
-using ObjectPool;
+using ObjectPool.Interface;
 using UnityEngine;
 using Extensions;
+using Zenject;
 
 namespace Gameplay.Manager
 {
-    public class RoundManager : MonoBehaviour
+    public class RoundManager : MonoBehaviour, IRoundManager
     {
-        [SerializeField] private int roundno = 1;
+        private int roundno = 1;
         public int RoundNo => roundno;
-        [SerializeField] Monster prefabMonster;
-        [SerializeField] ObjectPooler objectPooler;
-
-        [SerializeField] List<IMonster> monsters = new();
-
-        [SerializeField] List<IMonster> monstersRank = new();
-
-        public Action<List<IMonster>> OnRoundFinished;
-
+        [SerializeField] IMonster prefabMonster;
+        IObjectPooler objectPooler;
+        List<IMonster> monsters = new();
+        List<IMonster> monstersRank = new();
+        public Action<List<IMonster>> OnRoundFinished { get; set; }
         private Action MonsterCanMove;
 
-        public void InitializeRound(out int totalMonsters,Action<int> SetCamera)
+        [Inject]
+        private void Constructor(IObjectPooler objectPooler, IMonster prefabMonster)
+        {
+            this.objectPooler = objectPooler;
+            this.prefabMonster = prefabMonster;
+        }
+
+        public void InitializeRound(out int totalMonsters, Action<int> SetCamera)
         {
             totalMonsters = roundno.GetFibonacciSequence();
             SetCamera?.Invoke(totalMonsters);

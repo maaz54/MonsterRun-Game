@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay.Interface;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gameplay.Manager
 {
-    public class EnviromentAdjustment : MonoBehaviour
+    public class EnviromentAdjustment : MonoBehaviour, IEnviroment
     {
         [SerializeField] Camera mainCamera;
         [SerializeField] GameObject backGround;

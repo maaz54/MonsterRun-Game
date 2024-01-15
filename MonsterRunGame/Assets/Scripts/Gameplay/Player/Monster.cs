@@ -5,6 +5,7 @@ using ObjectPool.Interface;
 using System;
 using TMPro;
 using System.Threading.Tasks;
+using Gameplay.Interface;
 
 namespace Gameplay.Monsters
 {
