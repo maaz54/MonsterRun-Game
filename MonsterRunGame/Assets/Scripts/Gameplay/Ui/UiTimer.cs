@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using Extensions;
 
 namespace Gameplay.UI
 {
@@ -16,13 +17,13 @@ namespace Gameplay.UI
         {
             isPlaying = true;
             timeElapsed = 0;
-            timeText.text = DisplayTime(timeElapsed);
+            timeText.text = timeElapsed.DisplayTime();
 
             while (isPlaying)
             {
                 await Task.Delay(TimeSpan.FromSeconds(1));
                 timeElapsed++;
-                timeText.text = DisplayTime(timeElapsed);
+                timeText.text = timeElapsed.DisplayTime();
             }
 
         }
@@ -33,15 +34,6 @@ namespace Gameplay.UI
             timeElapsed = this.timeElapsed;
         }
 
-        /// <summary>
-        /// Formats the time in minutes and seconds for display
-        /// </summary>
-        string DisplayTime(float timeToDisplay)
-        {
-            float minutes = Mathf.FloorToInt(timeToDisplay / 60);
-            float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-            return string.Format("{0:00}:{1:00}", minutes, seconds);
-        }
     }
 
 }

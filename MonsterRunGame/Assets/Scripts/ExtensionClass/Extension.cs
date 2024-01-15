@@ -31,6 +31,18 @@ namespace Extensions
             }
             return result;
         }
+
+        /// <summary>
+        /// Formats the time in minutes and seconds for display
+        /// </summary>
+        public static string DisplayTime(this float timeToDisplay)
+        {
+            float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+            float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+            return string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+
+
     }
 
 }

@@ -95,7 +95,7 @@ namespace Gameplay.Manager
             monster.OnFinished += OnMonsterFinishGame;
             monster.Initialize(ref MonsterCanMove, "Monster" + monsters.Count);
             await Task.Yield();
-            SpawnMonster(count - 1);
+            _ = SpawnMonster(count - 1);
         }
 
         private Vector2 MonsterPositon(float yStartPos)

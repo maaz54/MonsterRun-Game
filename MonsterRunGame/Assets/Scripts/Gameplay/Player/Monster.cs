@@ -20,7 +20,6 @@ namespace Gameplay.Monsters
         public Transform Transform => transform;
         public Action<IMonster> OnFinished { get; set; }
         public string MonsterName { get; set; }
-
         private bool canMove = false;
 
         public void Initialize(ref Action CanMove, string MonsterName)
@@ -74,6 +73,7 @@ namespace Gameplay.Monsters
             // we can add more visuals for destroy monster
             canMove = false;
             gameObject.SetActive(false);
+
         }
 
     }

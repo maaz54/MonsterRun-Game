@@ -62,12 +62,14 @@ namespace Gameplay.Manager.UI
             uiTimer.StopTimer(out timeElapsed);
         }
 
-        public void ShowResult(string[] PlayersRanking, string totalTime)
+        public async Task ShowResult(string[] PlayersRanking, float totalTime)
         {
             GameplayPanel.SetActive(false);
             menuPanel.SetActive(false);
             ResultPanel.gameObject.SetActive(true);
-            ResultPanel.ShowResult(PlayersRanking, totalTime);
+            startNextRoundButton.gameObject.SetActive(false);
+            await ResultPanel.ShowResult(PlayersRanking, totalTime);
+            startNextRoundButton.gameObject.SetActive(true);
         }
 
         private void GameStartButton()

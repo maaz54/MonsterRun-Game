@@ -48,12 +48,12 @@ namespace Gameplay.Manager
 
         private void OnRoundInitalized()
         {
-            StartGame();
+            _ = StartGame();
         }
 
         private async Task StartGame()
         {
-             uiManager.StopLoading();
+            uiManager.StopLoading();
             await uiManager.StartGame(roundManager.RoundNo, roundManager.TotalMonsters);
             roundManager.StartRound();
         }
@@ -67,9 +67,7 @@ namespace Gameplay.Manager
         {
             await Task.Delay(1);
             uiManager.StopTimer(out float timeElapsed);
-            uiManager.ShowResult(monsters.Select(monster => monster.MonsterName).ToArray(), timeElapsed.ToString());
-
-            await Task.Delay(1);
+            await uiManager.ShowResult(monsters.Select(monster => monster.MonsterName).ToArray(), timeElapsed);
             roundManager.RoundComplete();
             roundManager.DespawnRound();
 
