@@ -21,7 +21,7 @@ namespace Gameplay.Monsters
         public Action<IMonster> OnFinished { get; set; }
         public string MonsterName { get; set; }
 
-        private bool canMove;
+        private bool canMove = false;
 
         public void Initialize(ref Action CanMove, string MonsterName)
         {
@@ -37,7 +37,7 @@ namespace Gameplay.Monsters
             canMove = true;
         }
 
-        void Update()
+        public void UpdateCall()
         {
             if (canMove)
             {

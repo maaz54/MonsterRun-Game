@@ -18,6 +18,7 @@ namespace Gameplay.Installer
         [SerializeField] UiManager uiManager;
         [SerializeField] ObjectPooler objectPooler;
         [SerializeField] Monster monsterPrefab;
+        [SerializeField] PlayersHandler playersHandler;
 
         public override void InstallBindings()
         {
@@ -26,6 +27,7 @@ namespace Gameplay.Installer
             Container.Bind<IUIManager>().FromInstance(uiManager).AsSingle();
             Container.Bind<IObjectPooler>().FromInstance(objectPooler).AsSingle();
             Container.Bind<IMonster>().FromInstance(monsterPrefab).AsSingle();
+            Container.Bind<IPlayersHandler>().FromInstance(playersHandler).AsSingle();
         }
     }
 }

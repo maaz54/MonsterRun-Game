@@ -14,14 +14,12 @@ namespace Gameplay.Manager
     {
         IUIManager uiManager;
         IRoundManager roundManager;
-        IEnviroment enviroment;
 
         [Inject]
         private void Constructor(IUIManager uiManager, IRoundManager roundManager, IEnviroment enviroment)
         {
             this.uiManager = uiManager;
             this.roundManager = roundManager;
-            this.enviroment = enviroment;
         }
 
         void Start()
@@ -29,22 +27,32 @@ namespace Gameplay.Manager
             uiManager.OnGameStartButton += OnGameStartButton;
             uiManager.OnStartNextRoundButton += OnStartNextRoundButton;
             roundManager.OnRoundFinished += AllMonsterReached;
+            roundManager.OnRoundInitialized += OnRoundInitalized;
         }
 
         private void OnGameStartButton()
         {
-            _ = OnGameStart();
+            OnGameStart();
         }
 
         private void OnStartNextRoundButton()
         {
-            _ = OnGameStart();
+            OnGameStart();
         }
 
-        private async Task OnGameStart()
+        private void OnGameStart()
         {
-            roundManager.InitializeRound(out int totalMonsters, (totalMonsters) => enviroment.SetEnviroment(totalMonsters));
-            await uiManager.StartGame(roundManager.RoundNo, totalMonsters);
+            roundManager.InitializeRound();
+        }
+
+        private void OnRoundInitalized()
+        {
+            StartGame();
+        }
+
+        private async Task StartGame()
+        {
+            await uiManager.StartGame(roundManager.RoundNo, roundManager.TotalMonsters);
             roundManager.StartRound();
         }
 

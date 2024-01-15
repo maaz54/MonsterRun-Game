@@ -15,28 +15,43 @@ namespace Gameplay.Manager
 {
     public class RoundManager : MonoBehaviour, IRoundManager
     {
-        private int roundno = 1;
+        IPlayersHandler playersHandler;
+        [SerializeField] private int roundno = 1;
         public int RoundNo => roundno;
-        [SerializeField] IMonster prefabMonster;
+        public int TotalMonsters => monsters.Count;
+        public Action OnRoundInitialized { get; set; }
+        IMonster prefabMonster;
         IObjectPooler objectPooler;
         List<IMonster> monsters = new();
         List<IMonster> monstersRank = new();
+        IEnviroment enviroment;
+
         public Action<List<IMonster>> OnRoundFinished { get; set; }
         private Action MonsterCanMove;
 
         [Inject]
-        private void Constructor(IObjectPooler objectPooler, IMonster prefabMonster)
+        private void Constructor(IObjectPooler objectPooler, IMonster prefabMonster, IEnviroment enviroment, IPlayersHandler playersHandler)
         {
             this.objectPooler = objectPooler;
             this.prefabMonster = prefabMonster;
+            this.enviroment = enviroment;
+            this.playersHandler = playersHandler;
         }
 
-        public void InitializeRound(out int totalMonsters, Action<int> SetCamera)
+        public async Task InitializeRound()
         {
-            totalMonsters = roundno.GetFibonacciSequence();
-            SetCamera?.Invoke(totalMonsters);
-            SpawnMonster(totalMonsters);
+            int totalMonsters = roundno.GetFibonacciSequence();
+            enviroment.SetEnviroment(totalMonsters);
+            Debug.Log(totalMonsters);
+            await SpawnMonster(totalMonsters);
         }
+
+        private void AllMonstersSpawned()
+        {
+            playersHandler.AssignMonsters(monsters.ToArray());
+            OnRoundInitialized?.Invoke();
+        }
+
 
         public void RoundComplete()
         {
@@ -45,6 +60,7 @@ namespace Gameplay.Manager
 
         public void DespawnRound()
         {
+            playersHandler.IsGameStarted = false;
             monstersRank.Clear();
             DespanwnMonster();
             MonsterCanMove = null;
@@ -62,25 +78,25 @@ namespace Gameplay.Manager
 
         public void StartRound()
         {
+            playersHandler.IsGameStarted = true;
             MonsterCanMove?.Invoke();
         }
 
-        private void SpawnMonster(int count)
+        private async Task SpawnMonster(int count)
         {
-            if (count <= 0)
+            if (count <= 0 || !Application.isPlaying)
+            {
+                AllMonstersSpawned();
                 return;
-
+            }
 
             IMonster monster = objectPooler.Pool<Monster>(prefabMonster, transform);
             monster.Transform.position = MonsterPositon(monsters.Count > 0 ? monsters[monsters.Count - 1].Transform.position.y : 0);
-
-
             monsters.Add(monster);
             monster.OnFinished += OnMonsterFinishGame;
             monster.Initialize(ref MonsterCanMove, "Monster" + monsters.Count);
-
+            await Task.Yield();
             SpawnMonster(count - 1);
-
         }
 
         private Vector2 MonsterPositon(float yStartPos)

@@ -1,15 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay.Interface
 {
     public interface IRoundManager
     {
-        public int RoundNo { get; }
+        int RoundNo { get; }
+        int TotalMonsters { get; }
+        Action OnRoundInitialized { get; set; }
         Action<List<IMonster>> OnRoundFinished { get; set; }
-        void InitializeRound(out int totalMonsters, Action<int> SetCamera);
+        Task InitializeRound();
         void RoundComplete();
         void DespawnRound();
 
