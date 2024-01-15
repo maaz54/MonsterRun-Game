@@ -42,6 +42,7 @@ namespace Gameplay.Manager
 
         private void OnGameStart()
         {
+            uiManager.StartLoading();
             roundManager.InitializeRound();
         }
 
@@ -52,6 +53,7 @@ namespace Gameplay.Manager
 
         private async Task StartGame()
         {
+             uiManager.StopLoading();
             await uiManager.StartGame(roundManager.RoundNo, roundManager.TotalMonsters);
             roundManager.StartRound();
         }

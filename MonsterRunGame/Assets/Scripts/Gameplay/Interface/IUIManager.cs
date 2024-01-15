@@ -13,5 +13,7 @@ namespace Gameplay.Interface
         Task StartGame(int roundNumber, int totalMonsters);
         void StopTimer(out float timeElapsed);
         void ShowResult(string[] PlayersRanking, string totalTime);
+        public void StartLoading();
+        public void StopLoading();
     }
 }

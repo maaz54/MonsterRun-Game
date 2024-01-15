@@ -20,6 +20,7 @@ namespace Gameplay.Manager.UI
         [SerializeField] TextMeshProUGUI roundNumberText;
         [SerializeField] TextMeshProUGUI TotalMonstersText;
         [SerializeField] GameStartCounter gameStartCounter;
+        [SerializeField] LoadingScreen loadingScreen;
         [SerializeField] UiTimer uiTimer;
         public Action OnGameStartButton { get; set; }
         public Action OnStartNextRoundButton { get; set; }
@@ -32,6 +33,7 @@ namespace Gameplay.Manager.UI
             menuPanel.SetActive(true);
             GameplayPanel.SetActive(false);
             ResultPanel.gameObject.SetActive(false);
+            loadingScreen.gameObject.SetActive(false);
         }
 
         public async Task StartGame(int roundNumber, int totalMonsters)
@@ -43,6 +45,16 @@ namespace Gameplay.Manager.UI
             TotalMonstersText.text = "Total Monsters\n" + totalMonsters;
             await gameStartCounter.StartCounter(3);
             _ = uiTimer.StartTimer();
+        }
+
+        public void StartLoading()
+        {
+            loadingScreen.StartLoading();
+        }
+
+        public void StopLoading()
+        {
+            loadingScreen.StopLoading();
         }
 
         public void StopTimer(out float timeElapsed)
