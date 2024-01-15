@@ -42,7 +42,6 @@ namespace Gameplay.Manager
         {
             int totalMonsters = roundno.GetFibonacciSequence();
             enviroment.SetEnviroment(totalMonsters);
-            Debug.Log(totalMonsters);
             await SpawnMonster(totalMonsters);
         }
 
